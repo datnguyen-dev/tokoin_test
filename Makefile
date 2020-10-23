@@ -22,24 +22,6 @@ linux: clean
 windows: clean
 	env GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o dist/${APP}.exe
 
-# Build application for docker container
-docker:
-	[ -f dist/${APP} ] || exit 1
-	docker build --pull -t ${IMAGE_NAME}:${VERSION}-${BUILD} .
-
-docker_save:
-	docker save -o dist/${IMAGE_FILE} ${IMAGE_NAME}:${VERSION}-${BUILD}
-
-docker_load:
-	docker load < dist/${IMAGE_FILE}
-
-docker_push:
-	docker tag ${IMAGE_NAME}:${VERSION}-${BUILD} ${IMAGE_NAME}:${VERSION}
-	docker tag ${IMAGE_NAME}:${VERSION}-${BUILD} ${IMAGE_NAME}:latest
-	docker push ${IMAGE_NAME}:${VERSION}-${BUILD}
-	docker push ${IMAGE_NAME}:${VERSION}
-	docker push ${IMAGE_NAME}:latest
-
 # Clean application
 clean:
 	go clean
